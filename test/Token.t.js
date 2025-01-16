@@ -106,4 +106,41 @@ describe("Token", () => {
         });
         
     });
+
+    describe("Spending Tokens", () => {
+        let amount, transaction, result;
+
+        beforeEach(async () => {
+            amount = tokens(100);
+            transaction = await token.connect(deployer).approve(exchange.address, amount);
+            result = transaction.wait();
+        });
+
+        describe("Success", () => {
+            beforeEach(async () => {
+                transaction = await token.connect(exchange).transferFrom(deployer.address, receiver.address, amount);
+                result = transaction.wait();
+            });
+
+            it("transfers token balance", async () => {
+                expect(await token.balanceOf(deployer.address)).to.equal(tokens(999900));
+                expect(await token.balanceOf(receiver.address)).to.equal(amount);
+            });
+    
+            it("resets allowance", async () => {
+                expect(await token.allowance(deployer.address, receiver.address)).to.equal(0);
+            });
+    
+            it("emits Transfer event", async () => {
+                expect(transaction).to.emit(token, "Transfer").withArgs(deployer.address, receiver.address, amount);
+            });
+        });
+
+        describe("Failure", () => {
+            it("rejects insufficient allowance", async () => {
+                amount = tokens(100000000);
+                await expect(token.connect(exchange).transferFrom(deployer.address, receiver.address, amount)).to.be.reverted;
+            });
+        });
+    });
 });
