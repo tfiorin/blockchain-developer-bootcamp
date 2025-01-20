@@ -15,6 +15,7 @@ contract Exchange {
     event Deposit(address token, address user, uint256 amount, uint256 balance);
     event Withdraw(address token, address user, uint256 amount, uint256 balance);
     event Order(uint256 id, address user, address tokenGet, uint256 amountGet, address tokenGive, uint256 amountGive, uint256 timestamp);
+    event Cancel(uint256 id, address user, address tokenGet, uint256 amountGet, address tokenGive, uint256 amountGive, uint256 timestamp);
 
     struct _Order {
         uint256 id;
@@ -85,12 +86,17 @@ contract Exchange {
         // get order
         _Order storage _order = orders[_id];
 
+        // validate order
         require(msg.sender == _order.user, "Invalid user");
+        // order must exists
         require(_order.id == _id, "Invalid order");
         
         // remove order from storage
         //delete orders[_id];
 
         orderCancelled[_id] = true;
+
+        // emit event
+        emit Cancel(_id, msg.sender, _order.tokenGet, _order.amountGet, _order.tokenGive, _order.amountGive, block.timestamp);
     }
 }
