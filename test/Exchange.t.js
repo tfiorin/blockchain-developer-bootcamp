@@ -190,4 +190,42 @@ describe("Exchange", () => {
             });
         });
     });
+
+    describe("Order actions", async() => { 
+
+        beforeEach(async () => {
+            let amount = tokens(10);
+
+            //Approve the exchange to spend the tokens
+            let transaction = await token1.connect(user1).approve(exchange.address, amount);
+            await transaction.wait();   
+
+            //Deposit tokens
+            transaction = await exchange.connect(user1).depositToken(token1.address, amount);
+            await transaction.wait();
+
+            //Make order
+            transaction = await exchange.connect(user1).makeOrder(token2.address, amount, token1.address, amount);
+            await transaction.wait();
+        });
+
+        describe("Cancelling orders", async() => {
+            
+            describe("Success", async() => {
+                beforeEach(async() => {
+                    let transaction = await exchange.connect(user1).cancelOrder(1);
+                    await transaction.wait();
+                });
+
+                it("tracks the order cancellation", async() => {
+                    expect(await exchange.orderCancelled(1)).to.equal(true);
+                });
+                
+            });
+
+            describe("Failure", async() => {
+                
+            });
+        });
+    });
 });
