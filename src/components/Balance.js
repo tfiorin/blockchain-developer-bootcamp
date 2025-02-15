@@ -16,7 +16,7 @@ const Balance = () => {
     const provider = useSelector(state => state.provider.connection);
     const account = useSelector(state => state.provider.account);
 
-    const exchange = useSelector(state => state.exchange.contract)
+    const exchange = useSelector(state => state.exchange.contract);
     const exchangeBalances = useSelector(state => state.exchange.balances);
     const transferInProgress = useSelector(state => state.exchange.transferInProgress);
 

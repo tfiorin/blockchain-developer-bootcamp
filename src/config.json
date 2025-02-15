@@ -15,6 +15,18 @@
     "explorerURL": "#"
   },
     "11155111":{
-      "explorerURL": "https://sepolia.infura.io/"
+      "exchange": {
+        "address": "0x5cC5Ea56D6736dc2fD1FC33560476F9dCeE713Ff"
+      },
+      "DApp": {
+        "address": "0xc6Dd0dB3152f02C4AcCa7179E1F1Dd39f950224A"
+      },
+      "mETH": {
+        "address": "0x7890D68149CDC850f008d2C1BB6456A555f5738A"
+      },
+      "mDAI": {
+        "address": "0xEFD64DCb94375ba5F94d8CadC753364e22Ca6CCF"
+      },
+      "explorerURL": "https://sepolia.etherscan.io/"
   }
 }
